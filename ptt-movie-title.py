@@ -15,6 +15,21 @@ request = req.Request(url, headers = {
 
 with req.urlopen(request) as response:
     data = response.read().decode("utf-8")
-print(data)
+# print(data)
 
-# 
+# 下載beautifulsoup4遇到的問題
+# https://blog.csdn.net/sunnywuxian/article/details/82870803
+
+# 解析原始碼，取得每篇的文章標題
+import bs4
+root = bs4.BeautifulSoup(data, "html.parser") # 將抓到的hrml丟給bs4解析
+
+# 抓 title tag 裡的文字
+# print(root.title.string)
+
+# titles = root.find("div", class_="title") # 尋找 class="title" 的 div 標籤 (只印出第一個)
+
+titles = root.find_all("div", class_="title") # 尋找所有 class="title" 的 div 標籤
+for title in titles:
+    if title.a != None:
+        print(title.a.string)
